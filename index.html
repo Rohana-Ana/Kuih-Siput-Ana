@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kuih Siput - Tempahan</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    #cartList {
+      padding-left: 20px;
+      margin-bottom: 1rem;
+    }
+    #cartList li {
+      margin-bottom: 5px;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .cart-item button {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .total {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">
+        <img src="logo.png" alt="Logo Kuih Siput">
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">Tentang</a></li>
+          <li><a href="#products">Produk</a></li>
+          <li><a href="#order">Tempahan</a></li>
+          <li><a href="#contact">Hubungi</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="home" class="hero">
+    <h1>Kuih Siput Ana</h1>
+    <p>Rasa yang unik dan segar. Tempah sekarang!</p>
+    <a href="#order" class="btn">Tempah</a>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="section">
+    <div class="container">
+      <h2>Tentang Kami</h2>
+      <p>Kami menyediakan kuih siput dengan rasa tradisional yang tidak tertandingi. Dibuat dengan bahan-bahan berkualiti tinggi dan penuh rasa.</p>
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section id="products" class="section">
+    <div class="container">
+      <h2>Produk Kami</h2>
+      <div class="product">
+        <img src="kuih-siput-kecil.jpg" alt="Kuih Siput Kecil">
+        <h3>Kuih Siput Kecil</h3>
+        <f>Berat 100g</f>
+        <p>Perisa Pedas/Biasa - RM10</p>
+      </div>
+      <div class="product">
+        <img src="kuih-siput-besar.jpg" alt="Kuih Siput Besar">
+        <h3>Kuih Siput Besar</h3>
+        <f>Berat 250g</f>
+        <p>Perisa Pedas/Biasa - RM15</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Order Section -->
+  <section id="order" class="section">
+    <div class="container">
+      <h2>Tempahan Kuih Siput</h2>
+      <form id="orderForm" onsubmit="return false;">
+        <label for="size">Pilih Saiz:</label>
+        <select id="size" name="size" required>
+          <option value="kecil">Kecil</option>
+          <option value="besar">Besar</option>
+        </select>
+
+        <label for="flavour">Pilih Perisa:</label>
+        <select id="flavour" name="flavour" required>
+          <option value="pedas">Pedas</option>
+          <option value="biasa">Biasa</option>
+        </select>
+
+        <label for="quantity">Jumlah:</label>
+        <input type="number" id="quantity" name="quantity" min="1" required>
+
+        <button type="button" class="btn" onclick="addToCart()">Tambah ke Troli</button>
+
+        <hr>
+
+        <h3>Senarai Tempahan</h3>
+        <ul id="cartList"></ul>
+        <p class="total" id="totalPrice">Jumlah: RM0</p>
+
+        <label for="contact">Nama & Nombor Telefon:</label>
+        <input type="text" id="contact" name="contact" required>
+
+        <label for="message">Nota Tambahan:</label>
+        <textarea id="message" name="message" rows="3" placeholder="Contoh: Hantar waktu petang, guna plastik asing, dsb."></textarea>
+
+        <button type="button" class="btn" onclick="sendToWhatsApp()">Hantar Tempahan</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="section">
+    <div class="container">
+      <h2>Hubungi Kami</h2>
+      <p>Email: rohanarohani67@gmail.com</p>
+      <p>Tel: 012-9134349</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Kuih Siput | <a href="#">Privasi</a> | <a href="#">Syarat Penggunaan</a></p>
+    </div>
+  </footer>
+
+  <script>
+    let cart = [];
+
+    function getPrice(size) {
+      return size === 'kecil' ? 10 : 15;
+    }
+
+    function addToCart() {
+      const size = document.getElementById('size').value;
+      const flavour = document.getElementById('flavour').value;
+      const quantity = parseInt(document.getElementById('quantity').value);
+
+      if (!size || !flavour || quantity < 1) return;
+
+      cart.push({ size, flavour, quantity });
+      updateCartUI();
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      const cartList = document.getElementById('cartList');
+      const totalPriceEl = document.getElementById('totalPrice');
+      cartList.innerHTML = '';
+      let total = 0;
+
+      cart.forEach((item, index) => {
+        const li = document.createElement('li');
+        const price = getPrice(item.size) * item.quantity;
+        total += price;
+        li.innerHTML = `
+          <div class="cart-item">
+            <span>${item.quantity} x Kuih Siput ${capitalize(item.size)} (${item.flavour}) - RM${price}</span>
+            <button onclick="removeFromCart(${index})">Padam</button>
+          </div>
+        `;
+        cartList.appendChild(li);
+      });
+
+      totalPriceEl.textContent = `Jumlah: RM${total}`;
+    }
+
+    function capitalize(word) {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    }
+
+    function sendToWhatsApp() {
+      const contact = document.getElementById('contact').value.trim();
+      const messageNote = document.getElementById('message').value.trim();
+
+      if (!contact || cart.length === 0) {
+        alert('Sila isi maklumat dan tambah sekurang-kurangnya satu tempahan.');
+        return;
+      }
+
+      let message = `Tempahan Kuih Siput:\n`;
+      let total = 0;
+      cart.forEach((item, index) => {
+        const itemTotal = getPrice(item.size) * item.quantity;
+        total += itemTotal;
+        message += `- ${item.quantity} x ${capitalize(item.size)} (${item.flavour}) - RM${itemTotal}\n`;
+      });
+
+      message += `\nJumlah Keseluruhan: RM${total}`;
+      message += `\nNama & Nombor: ${contact}`;
+      if (messageNote) {
+        message += `\nNota: ${messageNote}`;
+      }
+
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappNumber = "60129134349"; // tanpa "-" dan guna kod negara
+      const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+      window.open(whatsappLink, '_blank');
+    }
+  </script>
+</body>
+</html>
