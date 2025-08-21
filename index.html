@@ -3,32 +3,358 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kuih Siput - Tempahan</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Kuih Siput Ana - Tempahan Produk</title>
   <style>
-    #cartList {
-      padding-left: 20px;
-      margin-bottom: 1rem;
+    /* General Styles */
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      color: #333;
     }
-    #cartList li {
+
+    .container {
+      width: 85%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* Header */
+    header {
+      background-color: #d35400;
+      padding: 15px 0;
+      color: white;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    header .logo img {
+      width: 160px;
+      transition: transform 0.3s;
+    }
+
+    header .logo img:hover {
+      transform: scale(1.05);
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 15px 0 0;
+    }
+
+    nav ul li {
+      display: inline-block;
+      margin: 0 15px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    nav ul li a:hover {
+      color: #f39c12;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, #e67e22, #d35400);
+      text-align: center;
+      padding: 100px 20px;
+      color: white;
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      margin: 0;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      margin: 15px 0 25px;
+    }
+
+    .btn {
+      background-color: #2c3e50;
+      color: white;
+      padding: 12px 24px;
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: bold;
+      display: inline-block;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .btn:hover {
+      background-color: #e67e22;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+
+    /* Section Styling */
+    .section {
+      padding: 60px 0;
+    }
+
+    h2 {
+      font-size: 28px;
+      text-align: center;
+      margin-bottom: 30px;
+      color: #2c3e50;
+    }
+
+    /* Product Tabs */
+    .product-tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .tab-btn {
+      padding: 12px 20px;
+      background: #f1f1f1;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 8px 8px 0 0;
+      transition: all 0.3s;
+      color: #555;
+    }
+
+    .tab-btn:hover {
+      background: #e0e0e0;
+    }
+
+    .tab-btn.active {
+      background: #d35400;
+      color: white;
+    }
+
+    /* Tab Content */
+    .tab-content {
+      display: none;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      animation: fadeIn 0.5s;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Products Grid */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+
+    .product-info {
+      padding: 15px;
+    }
+
+    .product-info h3 {
+      font-size: 1.3rem;
+      margin: 0 0 8px;
+      color: #2c3e50;
+    }
+
+    .product-info f {
+      font-size: 0.9rem;
+      color: #7f8c8d;
+      display: block;
       margin-bottom: 5px;
     }
-    .cart-item {
+
+    .product-info p {
+      font-size: 1.1rem;
+      color: #e67e22;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .product-info button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      background: #d35400;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    .product-info button:hover {
+      background: #e67e22;
+    }
+
+    /* Form Styles */
+    .product-form {
+      margin-top: 15px;
+      padding: 15px;
+      background: #fdfbf7;
+      border-radius: 10px;
+      display: none;
+    }
+
+    .product-form.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: #2c3e50;
+    }
+
+    .form-group select,
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    .form-actions {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .form-actions button {
+      background: #2c3e50;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .form-actions button:hover {
+      background: #d35400;
+    }
+
+    /* Order Section */
+    #order {
+      background-color: #f8f9fa;
+    }
+
+    #order .container {
+      max-width: 700px;
+    }
+
+    /* Cart Styles */
+    #cartList {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0;
+    }
+
+    #cartList li {
+      background: #f8f9fa;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      font-size: 15px;
     }
+
     .cart-item button {
-      background-color: red;
+      background-color: #c0392b;
       color: white;
       border: none;
       padding: 4px 8px;
       border-radius: 4px;
       cursor: pointer;
+      font-size: 12px;
     }
+
     .total {
       font-weight: bold;
+      font-size: 1.2rem;
+      text-align: right;
       margin-top: 10px;
+      color: #2c3e50;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #2c3e50;
+      color: white;
+      text-align: center;
+      padding: 25px 0;
+    }
+
+    footer a {
+      color: #f39c12;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    .scroll-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #d35400;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      display: none;
     }
   </style>
 </head>
@@ -54,32 +380,256 @@
   <section id="home" class="hero">
     <h1>Kuih Siput Ana</h1>
     <p>Rasa yang unik dan segar. Tempah sekarang!</p>
-    <a href="#order" class="btn">Tempah</a>
+    <a href="#products" class="btn">Lihat Produk</a>
   </section>
 
   <!-- About Section -->
   <section id="about" class="section">
     <div class="container">
       <h2>Tentang Kami</h2>
-      <p>Kami menyediakan kuih siput dengan rasa tradisional yang tidak tertandingi. Dibuat dengan bahan-bahan berkualiti tinggi dan penuh rasa.</p>
+      <p>Kami menyediakan kuih siput dengan rasa tradisional yang tidak tertandingi. Dibuat dengan bahan-bahan berkualiti tinggi dan penuh rasa. Kami juga menawarkan perkhidmatan tempahan baju, sulaman, dan bunga telur untuk majlis istimewa anda.</p>
     </div>
   </section>
 
-  <!-- Products Section -->
+  <!-- Products Section with Tabs -->
   <section id="products" class="section">
     <div class="container">
       <h2>Produk Kami</h2>
-      <div class="product">
-        <img src="kuih-siput-kecil.jpg" alt="Kuih Siput Kecil">
-        <h3>Kuih Siput Kecil</h3>
-        <f>Berat 100g</f>
-        <p>Perisa Pedas/Biasa - RM10</p>
+
+      <!-- Tabs -->
+      <div class="product-tabs">
+        <button class="tab-btn active" onclick="openTab('kuih')">Kuih Siput</button>
+        <button class="tab-btn" onclick="openTab('bunga')">Bunga Telur</button>
+        <button class="tab-btn" onclick="openTab('baju')">Tempahan Baju</button>
+        <button class="tab-btn" onclick="openTab('sulam')">Sulaman</button>
       </div>
-      <div class="product">
-        <img src="kuih-siput-besar.jpg" alt="Kuih Siput Besar">
-        <h3>Kuih Siput Besar</h3>
-        <f>Berat 250g</f>
-        <p>Perisa Pedas/Biasa - RM15</p>
+
+      <!-- Tab Contents -->
+      <div id="kuih" class="tab-content active">
+        <div class="products-grid">
+          <div class="product-card">
+            <img src="kuih-siput-kecil.jpg" alt="Kuih Siput Kecil">
+            <div class="product-info">
+              <h3>Kuih Siput Kecil</h3>
+              <f>Berat: 100g</f>
+              <p>RM10 per balang</p>
+              <button onclick="showForm('kuih_kecil')">Pilih & Tempah</button>
+            </div>
+          </div>
+          <div class="product-card">
+            <img src="kuih-siput-besar.jpg" alt="Kuih Siput Besar">
+            <div class="product-info">
+              <h3>Kuih Siput Besar</h3>
+              <f>Berat: 250g</f>
+              <p>RM15 per balang</p>
+              <button onclick="showForm('kuih_besar')">Pilih & Tempah</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form for Kuih -->
+        <div id="form-kuih_kecil" class="product-form">
+          <h3>Kuih Siput Kecil (100g)</h3>
+          <div class="form-group">
+            <label>Perisa:</label>
+            <select id="kuih_kecil_flavour">
+              <option value="Pedas">Pedas</option>
+              <option value="Biasa">Biasa</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Jumlah:</label>
+            <input type="number" id="kuih_kecil_qty" min="1" value="1">
+          </div>
+          <div class="form-actions">
+            <button onclick="addKuihToCart('kecil')">Tambah ke Troli</button>
+          </div>
+        </div>
+
+        <div id="form-kuih_besar" class="product-form">
+          <h3>Kuih Siput Besar (250g)</h3>
+          <div class="form-group">
+            <label>Perisa:</label>
+            <select id="kuih_besar_flavour">
+              <option value="Pedas">Pedas</option>
+              <option value="Biasa">Biasa</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Jumlah:</label>
+            <input type="number" id="kuih_besar_qty" min="1" value="1">
+          </div>
+          <div class="form-actions">
+            <button onclick="addKuihToCart('besar')">Tambah ke Troli</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bunga Telur Tab -->
+      <div id="bunga" class="tab-content">
+        <div class="products-grid">
+          <div class="product-card">
+            <img src="bunga-telur-1.jpg" alt="Bunga Telur Mawar">
+            <div class="product-info">
+              <h3>Bunga Telur Mawar</h3>
+              <f>Hiasan klasik & elegan</f>
+              <p>RM12 sebiji</p>
+              <button onclick="showForm('bunga_mawar')">Tempah Sekarang</button>
+            </div>
+          </div>
+          <div class="product-card">
+            <img src="bunga-telur-2.jpg" alt="Bunga Telur Kertas">
+            <div class="product-info">
+              <h3>Bunga Telur Kertas</h3>
+              <f>Warna-warni & menarik</f>
+              <p>RM8 sebiji</p>
+              <button onclick="showForm('bunga_kertas')">Tempah Sekarang</button>
+            </div>
+          </div>
+          <div class="product-card">
+            <img src="bunga-telur-3.jpg" alt="Bunga Telur Teratai">
+            <div class="product-info">
+              <h3>Bunga Telur Teratai</h3>
+              <f>Simbol kemurnian</f>
+              <p>RM15 sebiji</p>
+              <button onclick="showForm('bunga_teratai')">Tempah Sekarang</button>
+            </div>
+          </div>
+          <div class="product-card">
+            <img src="bunga-telur-4.jpg" alt="Bunga Telur Anggrek">
+            <div class="product-info">
+              <h3>Bunga Telur Anggrek</h3>
+              <f>Mewah & eksklusif</f>
+              <p>RM14 sebiji</p>
+              <button onclick="showForm('bunga_anggrek')">Tempah Sekarang</button>
+            </div>
+          </div>
+          <div class="product-card">
+            <img src="bunga-telur-5.jpg" alt="Bunga Telur Dahlia">
+            <div class="product-info">
+              <h3>Bunga Telur Dahlia</h3>
+              <f>Rekaan moden</f>
+              <p>RM13 sebiji</p>
+              <button onclick="showForm('bunga_dahlia')">Tempah Sekarang</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Forms for Bunga Telur -->
+        <div id="form-bunga_mawar" class="product-form">
+          <h3>Bunga Telur Mawar</h3>
+          <div class="form-group">
+            <label>Jumlah:</label>
+            <input type="number" id="bunga_mawar_qty" min="1" value="1">
+          </div>
+          <div class="form-actions">
+            <button onclick="addBungaToCart('Mawar', 12)">Tambah ke Troli</button>
+          </div>
+        </div>
+        <!-- Ulang untuk lain-lain bunga -->
+        <div id="form-bunga_kertas" class="product-form"></div>
+        <div id="form-bunga_teratai" class="product-form"></div>
+        <div id="form-bunga_anggrek" class="product-form"></div>
+        <div id="form-bunga_dahlia" class="product-form"></div>
+
+        <script>
+          // Auto-fill bunga forms
+          ['kertas', 'teratai', 'anggrek', 'dahlia'].forEach((type, i) => {
+            const prices = { kertas: 8, teratai: 15, anggrek: 14, dahia: 13 };
+            const el = document.getElementById(`form-bunga_${type}`);
+            el.innerHTML = `
+              <h3>Bunga Telur ${capitalize(type)}</h3>
+              <div class="form-group">
+                <label>Jumlah:</label>
+                <input type="number" id="bunga_${type}_qty" min="1" value="1">
+              </div>
+              <div class="form-actions">
+                <button onclick="addBungaToCart('${capitalize(type)}', ${prices[type]})">Tambah ke Troli</button>
+              </div>
+            `;
+          });
+
+          function capitalize(word) {
+            return word.charAt(0).toUpperCase() + word.slice(1);
+          }
+        </script>
+      </div>
+
+      <!-- Tempahan Baju Tab -->
+      <div id="baju" class="tab-content">
+        <div class="product-card" style="max-width: 500px; margin: 0 auto; text-align: center;">
+          <img src="baju-custom.jpg" alt="Tempahan Baju">
+          <div class="product-info">
+            <h3>Tempahan Baju</h3>
+            <f>Berdasarkan rekaan & kain pelanggan</f>
+            <p>RM50 - RM150</p>
+            <button onclick="showForm('baju')">Mula Tempahan</button>
+          </div>
+        </div>
+
+        <div id="form-baju" class="product-form">
+          <h3>Butiran Tempahan Baju</h3>
+          <div class="form-group">
+            <label>Jenis Baju:</label>
+            <select id="baju_type">
+              <option value="baju_kurung">Baju Kurung</option>
+              <option value="kebaya">Kebaya</option>
+              <option value="baju_melayu">Baju Melayu</option>
+              <option value="dress">Dress</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Ukuran:</label>
+            <input type="text" id="baju_size" placeholder="Contoh: M, L, XL atau ukuran penuh">
+          </div>
+          <div class="form-group">
+            <label>Anggaran Harga (RM):</label>
+            <input type="number" id="baju_price" min="50" value="80">
+          </div>
+          <div class="form-actions">
+            <button onclick="addServiceToCart('Baju', 'baju')">Tambah ke Troli</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sulaman Tab -->
+      <div id="sulam" class="tab-content">
+        <div class="product-card" style="max-width: 500px; margin: 0 auto; text-align: center;">
+          <img src="sulaman.jpg" alt="Sulaman Tangan">
+          <div class="product-info">
+            <h3>Sulaman Tangan</h3>
+            <f>Rekaan kraf tradisional</f>
+            <p>RM30 - RM100</p>
+            <button onclick="showForm('sulam')">Tempah Sekarang</button>
+          </div>
+        </div>
+
+        <div id="form-sulam" class="product-form">
+          <h3>Butiran Sulaman</h3>
+          <div class="form-group">
+            <label>Jenis Sulaman:</label>
+            <select id="sulam_type">
+              <option value="benang_emas">Benang Emas</option>
+              <option value="benang_warna">Benang Warna</option>
+              <option value="sulam_mesin">Sulam Mesin</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Kompleksiti:</label>
+            <select id="sulam_level">
+              <option value="rendah">Rendah</option>
+              <option value="sederhana">Sederhana</option>
+              <option value="tinggi">Tinggi</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Anggaran Harga (RM):</label>
+            <input type="number" id="sulam_price" min="30" value="50">
+          </div>
+          <div class="form-actions">
+            <button onclick="addServiceToCart('Sulaman', 'sulam')">Tambah ke Troli</button>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -87,39 +637,23 @@
   <!-- Order Section -->
   <section id="order" class="section">
     <div class="container">
-      <h2>Tempahan Kuih Siput</h2>
-      <form id="orderForm" onsubmit="return false;">
-        <label for="size">Pilih Saiz:</label>
-        <select id="size" name="size" required>
-          <option value="kecil">Kecil</option>
-          <option value="besar">Besar</option>
-        </select>
+      <h2>Senarai Tempahan Anda</h2>
+      <ul id="cartList"></ul>
+      <p class="total" id="totalPrice">Jumlah: RM0</p>
 
-        <label for="flavour">Pilih Perisa:</label>
-        <select id="flavour" name="flavour" required>
-          <option value="pedas">Pedas</option>
-          <option value="biasa">Biasa</option>
-        </select>
+      <hr style="margin: 30px 0;">
 
-        <label for="quantity">Jumlah:</label>
-        <input type="number" id="quantity" name="quantity" min="1" required>
-
-        <button type="button" class="btn" onclick="addToCart()">Tambah ke Troli</button>
-
-        <hr>
-
-        <h3>Senarai Tempahan</h3>
-        <ul id="cartList"></ul>
-        <p class="total" id="totalPrice">Jumlah: RM0</p>
-
+      <div class="form-group">
         <label for="contact">Nama & Nombor Telefon:</label>
-        <input type="text" id="contact" name="contact" required>
+        <input type="text" id="contact" placeholder="Contoh: Aisyah, 012-3456789">
+      </div>
 
+      <div class="form-group">
         <label for="message">Nota Tambahan:</label>
-        <textarea id="message" name="message" rows="3" placeholder="Contoh: Hantar waktu petang, guna plastik asing, dsb."></textarea>
+        <textarea id="message" rows="3" placeholder="Contoh: Hantar waktu petang, guna plastik asing..."></textarea>
+      </div>
 
-        <button type="button" class="btn" onclick="sendToWhatsApp()">Hantar Tempahan</button>
-      </form>
+      <button class="btn" style="width:100%" onclick="sendToWhatsApp()">Hantar Tempahan ke WhatsApp</button>
     </div>
   </section>
 
@@ -135,88 +669,138 @@
   <!-- Footer -->
   <footer>
     <div class="container">
-      <p>&copy; 2025 Kuih Siput | <a href="#">Privasi</a> | <a href="#">Syarat Penggunaan</a></p>
+      <p>&copy; 2025 Kuih Siput Ana | <a href="#">Privasi</a> | <a href="#">Syarat Penggunaan</a></p>
     </div>
   </footer>
+
+  <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="scroll-to-top" id="scrollTopBtn">↑</button>
 
   <script>
     let cart = [];
 
-    function getPrice(size) {
-      return size === 'kecil' ? 10 : 15;
-    }
-
-    function addToCart() {
-      const size = document.getElementById('size').value;
-      const flavour = document.getElementById('flavour').value;
-      const quantity = parseInt(document.getElementById('quantity').value);
-
-      if (!size || !flavour || quantity < 1) return;
-
-      cart.push({ size, flavour, quantity });
-      updateCartUI();
-    }
-
-    function removeFromCart(index) {
-      cart.splice(index, 1);
-      updateCartUI();
-    }
-
-    function updateCartUI() {
-      const cartList = document.getElementById('cartList');
-      const totalPriceEl = document.getElementById('totalPrice');
-      cartList.innerHTML = '';
-      let total = 0;
-
-      cart.forEach((item, index) => {
-        const li = document.createElement('li');
-        const price = getPrice(item.size) * item.quantity;
-        total += price;
-        li.innerHTML = `
-          <div class="cart-item">
-            <span>${item.quantity} x Kuih Siput ${capitalize(item.size)} (${item.flavour}) - RM${price}</span>
-            <button onclick="removeFromCart(${index})">Padam</button>
-          </div>
-        `;
-        cartList.appendChild(li);
+    // Tab System
+    function openTab(tabName) {
+      const tabs = document.getElementsByClassName("tab-content");
+      const btns = document.getElementsByClassName("tab-btn");
+      for (let i = 0; i < tabs.length; i++) {
+        tabs[i].classList.remove("active");
+        btns[i].classList.remove("active");
+      }
+      document.getElementById(tabName).classList.add("active");
+      // Find and activate correct button
+      Array.from(document.querySelectorAll('.tab-btn')).forEach(btn => {
+        if (btn.textContent.toLowerCase().includes(tabName)) btn.classList.add('active');
       });
+      hideAllForms();
+    }
 
-      totalPriceEl.textContent = `Jumlah: RM${total}`;
+    // Show Form
+    function showForm(formId) {
+      hideAllForms();
+      const form = document.getElementById(`form-${formId}`);
+      if (form) form.classList.add('active');
+    }
+
+    function hideAllForms() {
+      const forms = document.querySelectorAll('.product-form');
+      forms.forEach(f => f.classList.remove('active'));
+    }
+
+    // Add to Cart
+    function addKuihToCart(size) {
+      const flavour = document.getElementById(`kuih_${size}_flavour`).value;
+      const qty = parseInt(document.getElementById(`kuih_${size}_qty`).value);
+      const price = size === 'kecil' ? 10 : 15;
+      cart.push({
+        name: `Kuih Siput ${capitalize(size)} (${flavour})`,
+        qty, price
+      });
+      updateCart();
+      alert(`${qty}x Kuih Siput ${capitalize(size)} ditambah!`);
+    }
+
+    function addBungaToCart(type, price) {
+      const qty = parseInt(document.getElementById(`bunga_${type.toLowerCase()}_qty`).value);
+      cart.push({ name: `Bunga Telur ${type}`, qty, price });
+      updateCart();
+      alert(`${qty}x Bunga Telur ${type} ditambah!`);
+    }
+
+    function addServiceToCart(name, type) {
+      const price = parseFloat(document.getElementById(`${type}_price`).value);
+      const qty = 1;
+      let extra = '';
+      if (type === 'baju') extra = ` (${document.getElementById('baju_type').value})`;
+      if (type === 'sulam') extra = ` (${document.getElementById('sulam_type').value})`;
+      cart.push({ name: `${name}${extra}`, qty, price });
+      updateCart();
+      alert(`${name} ditambah ke troli!`);
     }
 
     function capitalize(word) {
       return word.charAt(0).toUpperCase() + word.slice(1);
     }
 
-    function sendToWhatsApp() {
-      const contact = document.getElementById('contact').value.trim();
-      const messageNote = document.getElementById('message').value.trim();
+    function updateCart() {
+      const cartList = document.getElementById('cartList');
+      const totalPriceEl = document.getElementById('totalPrice');
+      cartList.innerHTML = '';
+      let total = 0;
 
-      if (!contact || cart.length === 0) {
-        alert('Sila isi maklumat dan tambah sekurang-kurangnya satu tempahan.');
+      cart.forEach((item, index) => {
+        const itemTotal = item.price * item.qty;
+        total += itemTotal;
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <div class="cart-item">
+            <span>${item.qty}x ${item.name} - RM${itemTotal.toFixed(2)}</span>
+            <button onclick="removeFromCart(${index})">Padam</button>
+          </div>
+        `;
+        cartList.appendChild(li);
+      });
+
+      totalPriceEl.textContent = `Jumlah: RM${total.toFixed(2)}`;
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCart();
+    }
+
+    function sendToWhatsApp() {
+      if (cart.length === 0) {
+        alert('Troli kosong! Sila tambah tempahan.');
+        return;
+      }
+      const contact = document.getElementById('contact').value.trim();
+      if (!contact) {
+        alert('Sila isi nama dan nombor telefon.');
         return;
       }
 
-      let message = `Tempahan Kuih Siput:\n`;
-      let total = 0;
-      cart.forEach((item, index) => {
-        const itemTotal = getPrice(item.size) * item.quantity;
-        total += itemTotal;
-        message += `- ${item.quantity} x ${capitalize(item.size)} (${item.flavour}) - RM${itemTotal}\n`;
+      let message = `*Tempahan Baru* \n\n`;
+      cart.forEach((item, i) => {
+        const total = item.price * item.qty;
+        message += `${i+1}. ${item.qty}x ${item.name} = RM${total.toFixed(2)}\n`;
       });
 
-      message += `\nJumlah Keseluruhan: RM${total}`;
-      message += `\nNama & Nombor: ${contact}`;
-      if (messageNote) {
-        message += `\nNota: ${messageNote}`;
-      }
+      const grandTotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+      message += `\n*Jumlah:* RM${grandTotal.toFixed(2)}`;
+      message += `\n*Pelanggan:* ${contact}`;
+      const note = document.getElementById('message').value.trim();
+      if (note) message += `\n*Nota:* ${note}`;
+      message += `\n\nTerima kasih! `;
 
-      const encodedMessage = encodeURIComponent(message);
-      const whatsappNumber = "60129134349"; // tanpa "-" dan guna kod negara
-      const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
-
-      window.open(whatsappLink, '_blank');
+      const encoded = encodeURIComponent(message);
+      const waLink = `https://wa.me/60129134349?text=${encoded}`;
+      window.open(waLink, '_blank');
     }
+
+    // Scroll to top
+    window.onscroll = () => {
+      document.getElementById("scrollTopBtn").style.display = window.pageYOffset > 300 ? "block" : "none";
+    };
   </script>
 </body>
 </html>
